@@ -1,99 +1,141 @@
+"use client";
+import Link from "next/link";
+import { useState } from "react";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 export default function Register() {
+  const router = useRouter();
+
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (formData.password !== formData.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const res = await axios.post("/api/auth/register", {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+      });
+
+      if (res.status === 201 || res.status === 200) {
+        alert("🎉 Registration successful! Please log in.");
+        router.push("/login"); // navigate to login
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Something went wrong");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-700 relative overflow-hidden">
-      {/* Background subtle waves */}
-      <div className="absolute inset-0 bg-[url('/waves.svg')] bg-cover bg-center opacity-20"></div>
+    <div className="min-h-screen flex items-center justify-center bg-[#0f1216] relative overflow-hidden px-4">
+      {/* Glowing ambient shapes */}
+      <div className="absolute top-12 left-12 w-80 h-80 rounded-full bg-[#7C4DFF] opacity-20 blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-16 right-16 w-80 h-80 rounded-full bg-[#00B4D8] opacity-20 blur-3xl pointer-events-none"></div>
 
-      {/* Card */}
-      <div className="relative z-10 rounded-2xl bg-white/95 shadow-2xl max-w-lg w-full mx-4 px-8 py-10 border border-indigo-100">
-        {/* Illustration */}
-        <div className="mb-4 flex justify-center">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 p-[2px] shadow-lg">
-            <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-              <img
-                src="/storytelling-illustration.svg"
-                alt="Memory Lane registration"
-                className="w-16 h-16"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Heading */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+      {/* Glass-like card */}
+      <div className="relative z-10 bg-[#121622cc] backdrop-blur-md rounded-3xl p-10 max-w-lg w-full shadow-lg border border-white/10">
+        <h2 className="text-4xl font-extrabold text-[#7C4DFF] mb-6 text-center">
           Create Your{" "}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-purple-500 via-indigo-500 to-teal-400">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8]">
             Memory Lane
           </span>
         </h2>
-        <p className="mb-6 text-sm text-gray-600 text-center leading-relaxed">
+        <p className="text-[#B0B0B0] mb-8 text-center">
           Your memories deserve epic stories. Let’s make them timeless together ✨
         </p>
 
-        {/* Form */}
-        <form className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Name</span>
             <input
               type="text"
+              name="name"
               placeholder="Enter your name"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={formData.name}
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
+          </label>
 
-          {/* Email */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Email</span>
             <input
               type="email"
+              name="email"
               placeholder="Enter your email"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={formData.email}
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
+          </label>
 
-          {/* Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Password</span>
             <input
               type="password"
+              name="password"
               placeholder="Enter your password"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
+          </label>
 
-          {/* Confirm Password */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Confirm Password</span>
             <input
               type="password"
+              name="confirmPassword"
               placeholder="Re-enter your password"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
+          </label>
 
-          {/* Register Button */}
           <button
             type="submit"
-            className="mt-4 w-full py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-teal-400 text-white text-lg font-semibold shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-out"
+            disabled={loading}
+            className="w-full py-3 rounded-full bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-black font-bold hover:brightness-110 transition duration-300 disabled:opacity-50"
           >
-            Register
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="mt-6 text-sm text-gray-600 text-center">
-          Already have an account?
-          <a
-            href="/login"
-            className="ml-1 text-indigo-600 font-semibold hover:underline hover:text-purple-600"
-          >
+        <p className="mt-6 text-center text-[#9E9E9E]">
+          Already have an account?{" "}
+          <Link href="/login" className="text-[#7C4DFF] hover:underline">
             Login
-          </a>
+          </Link>
         </p>
       </div>
     </div>

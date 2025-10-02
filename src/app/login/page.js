@@ -1,86 +1,89 @@
+"use client";
+import { useState } from "react";
+import Link from "next/link";
+import axios from "axios";
+import { useRouter } from "next/navigation";
+
 export default function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const router = useRouter();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await axios.post("http://localhost:3000/api/auth/login", {
+        email,
+        password,
+      });
+
+      if (res.status === 200) {
+        alert("Login successful!");
+        localStorage.setItem("token", res.data.token);
+        localStorage.setItem("name", res.data.user.name); 
+        router.push("/");
+      }
+    } catch (err) {
+      console.error(err);
+      alert(err.response?.data?.message || "Login failed");
+    }
+  };
+
   return (
-    <div className="h-screen flex items-center justify-center bg-gradient-to-br from-purple-500 via-indigo-600 to-blue-700 relative overflow-hidden">
-      {/* Decorative background */}
-      <div className="absolute inset-0 bg-[url('/waves.svg')] bg-cover bg-center opacity-20"></div>
+    <div className="min-h-screen flex items-center justify-center bg-[#0f1216] relative overflow-hidden px-4">
+      {/* Passive glowing shapes for ambiance */}
+      <div className="absolute top-12 left-12 w-72 h-72 rounded-full bg-[#7C4DFF] opacity-20 blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-16 right-16 w-72 h-72 rounded-full bg-[#00B4D8] opacity-20 blur-3xl pointer-events-none"></div>
 
-      {/* Login Card */}
-      <div className="relative z-10 rounded-2xl bg-white/95 shadow-2xl max-w-md w-full mx-4 px-8 py-10 border border-indigo-100">
-        {/* Illustration */}
-        <div className="mb-4 flex justify-center">
-          <div className="w-20 h-20 rounded-full bg-gradient-to-r from-purple-400 via-indigo-400 to-teal-300 p-[2px] shadow-lg">
-            <div className="w-full h-full rounded-full bg-white flex items-center justify-center">
-              <img
-                src="/storytelling-illustration.svg"
-                alt="Login Illustration"
-                className="w-12 h-12"
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Heading */}
-        <h2 className="text-3xl font-bold text-gray-800 mb-2 text-center">
+      {/* Glassmorphic Card */}
+      <div className="relative z-10 bg-[#121622cc] backdrop-blur-md rounded-3xl p-10 max-w-md w-full shadow-lg border border-white/10">
+        <h2 className="text-4xl font-extrabold text-[#7C4DFF] mb-6 text-center">
           Welcome Back 👋
         </h2>
-        <p className="mb-6 text-sm text-gray-600 text-center leading-relaxed">
+        <p className="text-[#B0B0B0] mb-8 text-center">
           Log in to continue your journey down memory lane.
         </p>
 
-        {/* Login Form */}
-        <form className="space-y-4">
-          {/* Email */}
-          <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Email
-            </label>
+        <form className="space-y-6" onSubmit={handleSubmit}>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Email</span>
             <input
               type="email"
-              id="email"
               placeholder="Enter your email"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-indigo-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] 
+              focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
-
-          {/* Password */}
-          <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
-              Password
-            </label>
+          </label>
+          <label className="block">
+            <span className="text-[#B0B0B0]">Password</span>
             <input
               type="password"
-              id="password"
               placeholder="Enter your password"
-              className="w-full px-4 py-2.5 rounded-xl border border-gray-200 shadow-sm focus:ring-2 focus:ring-purple-400 focus:border-transparent outline-none transition bg-white text-gray-800 placeholder-gray-400"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="mt-1 w-full px-4 py-3 rounded-lg bg-[#1f2345] text-white placeholder-[#7278a5] 
+              focus:outline-none focus:ring-2 focus:ring-[#7C4DFF] border border-transparent transition"
               required
             />
-          </div>
-
-          {/* Login Button */}
+          </label>
           <button
             type="submit"
-            className="mt-4 w-full py-2.5 rounded-full bg-gradient-to-r from-purple-500 via-indigo-500 to-teal-400 text-white text-lg font-semibold shadow-md hover:shadow-xl hover:scale-105 transition-all duration-300 ease-out"
+            className="w-full py-3 rounded-full bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] 
+            text-black font-bold hover:brightness-110 transition duration-300"
           >
             Log In
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="mt-6 text-sm text-gray-600 text-center">
-          Don’t have an account?
-          <a
-            href="/register"
-            className="ml-1 text-indigo-600 font-semibold hover:underline hover:text-purple-600"
-          >
+        <p className="mt-6 text-center text-[#9E9E9E]">
+          Don’t have an account?{" "}
+          <Link href="/register" className="text-[#7C4DFF] hover:underline">
             Register
-          </a>
+          </Link>
         </p>
       </div>
     </div>
