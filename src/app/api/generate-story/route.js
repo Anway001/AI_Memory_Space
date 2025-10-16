@@ -4,7 +4,7 @@ import { WaveFile } from 'wavefile'; // Corrected import
 
 // --- LOCAL SERVER CONFIGURATION ---
 const OLLAMA_API_URL = "http://127.0.0.1:11434/api/generate";
-const MULTIMODAL_MODEL = "llava";
+const MULTIMODAL_MODEL = "llava:latest";
 
 // --- HELPER FUNCTIONS ---
 
@@ -16,21 +16,60 @@ const MULTIMODAL_MODEL = "llava";
  */
 const generateStoryFromImagesAndText = async (prompt, imageBuffers) => {
   console.log(`\n--- GENERATING STORY WITH MULTIMODAL PROMPT ---\n${prompt}\n-----------------------------------\n`);
-  const images = imageBuffers.map(buffer => buffer.toString('base64'));
+  // Convert image buffers to base64 strings for Ollama API
+  const images = imageBuffers.map(buffer => {
+    // Ensure we're getting a clean base64 string
+    const base64String = buffer.toString('base64');
+    console.log(`Image buffer length: ${buffer.length}, base64 length: ${base64String.length}`);
+    console.log(`Base64 preview: ${base64String.substring(0, 50)}...`);
+    return base64String;
+  });
+
+  console.log(`Sending request to Ollama with ${images.length} images`);
+  console.log(`Model: ${MULTIMODAL_MODEL}`);
+  console.log(`Prompt length: ${prompt.length} characters`);
+
   try {
+    // Use the generate API format for LLaVA
+    const requestBody = {
+        model: MULTIMODAL_MODEL,
+        prompt: prompt,
+        images: images,
+        stream: false,
+    };
+
+    console.log(`Trying request with ${images.length} images`);
+    console.log(`Request body: ${JSON.stringify(requestBody).substring(0, 300)}...`);
+
     const response = await fetch(OLLAMA_API_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            model: MULTIMODAL_MODEL,
-            prompt: prompt,
-            images: images,
-            stream: false,
-        }),
+        body: JSON.stringify(requestBody),
     });
-    if (!response.ok) throw new Error(`Ollama multimodal API error: ${response.statusText}`);
+
+    console.log(`Response status: ${response.status}`);
+    console.log(`Response status text: ${response.statusText}`);
+
+    if (!response.ok) {
+        const errorText = await response.text();
+        console.log(`Error response: ${errorText}`);
+        throw new Error(`Ollama API error: ${response.statusText} - ${errorText}`);
+    }
+
     const data = await response.json();
-    return data.response?.trim() || "Could not generate a story.";
+    console.log(`Response data: ${JSON.stringify(data).substring(0, 500)}...`);
+
+    // Handle different response formats
+    if (data.message && data.message.content) {
+        return data.message.content.trim();
+    } else if (data.response) {
+        return data.response.trim();
+    } else if (data.choices && data.choices[0] && data.choices[0].message) {
+        return data.choices[0].message.content.trim();
+    } else {
+        console.log("Unexpected response format:", data);
+        return "Could not generate a story - unexpected response format.";
+    }
   } catch (error) {
     console.error("Error generating story with Ollama:", error);
     return "Error: Could not generate the story.";
@@ -98,23 +137,40 @@ export async function POST(request) {
     const whatIf = formData.get('whatIf');
     const photos = formData.getAll('photos');
 
-    const imageBufferPromises = photos.map(async (photo) => {
+    const imageBufferPromises = photos.map(async (photo, index) => {
+        console.log(`Processing photo ${index + 1}:`, {
+            name: photo.name,
+            type: photo.type,
+            size: photo.size
+        });
+
         const arrayBuffer = await photo.arrayBuffer();
-        return Buffer.from(arrayBuffer);
+        const buffer = Buffer.from(arrayBuffer);
+
+        console.log(`Photo ${index + 1} buffer:`, {
+            arrayBufferLength: arrayBuffer.byteLength,
+            bufferLength: buffer.length,
+            firstBytes: buffer.subarray(0, 10)
+        });
+
+        return buffer;
     });
     const imageBuffers = await Promise.all(imageBufferPromises);
     
     const masterPrompt = `
-You are a creative storyteller. Based on the image(s) provided, write a single, cohesive story.
-Your story must follow these requirements:
+You are a creative storyteller. I have uploaded an image that I want you to analyze and create a story about.
+
+FIRST, carefully analyze what you see in the image(s). Describe what you observe in detail, then create a story based on that analysis.
+
+IMPORTANT: The story must be based on the ACTUAL CONTENT of the image(s), not random fantasy elements.
+
+Story requirements:
 - Genre: '${genre}'
 - Length: '${storyLength}'
-
-Incorporate the following user-provided details into the narrative:
 - Additional Scene Description: '${description || 'None'}'
-- A 'What If' Scenario to explore: '${whatIf || 'None'}'
+- What If Scenario: '${whatIf || 'None'}'
 
-Analyze the images deeply and weave all these elements together into an imaginative story. Begin the story directly.
+If the image shows data visualization, algorithms, or technical content, create a story that incorporates those elements in a meaningful way. Begin the story directly after your analysis.
 `;
 
     const finalStory = await generateStoryFromImagesAndText(masterPrompt, imageBuffers);
