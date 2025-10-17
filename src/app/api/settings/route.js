@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import connectDB from "@/lib/db"; // your DB connection
+import { connectDB } from "@/lib/db"; // your DB connection
 import User from "@/models/user"; // Mongoose user model
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
