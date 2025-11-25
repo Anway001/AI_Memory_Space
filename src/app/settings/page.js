@@ -26,18 +26,18 @@ export default function Settings() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f1216] via-[#3a1c71] to-[#24125a] text-[#E0E0E0] py-16 px-6 flex flex-col items-center">
-      <h1 className="text-5xl font-extrabold text-[#7C4DFF] mb-8 text-center drop-shadow-lg">
+    <div className="min-h-screen bg-gradient-to-br from-[#0f1216] via-[#3a1c71] to-[#24125a] text-[#E0E0E0] py-10 md:py-16 px-4 md:px-6 flex flex-col items-center">
+      <h1 className="text-3xl md:text-5xl font-extrabold text-[#7C4DFF] mb-8 text-center drop-shadow-lg">
         User Settings
       </h1>
 
-      <div className="w-full max-w-4xl bg-[#121622cc] backdrop-blur-md rounded-3xl p-10 shadow-lg border border-white/10 space-y-8">
+      <div className="w-full max-w-4xl bg-[#121622cc] backdrop-blur-md rounded-3xl p-6 md:p-10 shadow-lg border border-white/10 space-y-8">
 
         {/* Profile Section */}
         <div className="space-y-4">
           <h2 className="text-2xl font-bold text-[#B0B0B0]">Profile</h2>
           <div className="flex flex-col md:flex-row items-center gap-6">
-            <div className="relative">
+            <div className="relative flex-shrink-0">
               {profilePic ? (
                 <img
                   src={profilePic}

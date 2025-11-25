@@ -14,21 +14,21 @@ export default function Home() {
       <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-[#00B4D8] opacity-20 blur-3xl rounded-full animate-pulse"></div>
 
       {/* Hero Section */}
-      <section className="flex flex-col md:flex-row items-center max-w-7xl mx-auto px-12 py-28 space-y-16 md:space-y-0 md:space-x-24 relative z-10">
+      <section className="flex flex-col md:flex-row items-center max-w-7xl mx-auto px-6 md:px-12 py-16 md:py-28 space-y-12 md:space-y-0 md:space-x-24 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
-          className="flex-1 flex flex-col justify-center"
+          className="flex-1 flex flex-col justify-center text-center md:text-left"
         >
-          <h2 className="text-6xl font-extrabold leading-tight mb-6">
+          <h2 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8]">
               Turn Your Photos
             </span>
             <br />
             <span className="text-white">Into Captivating Stories</span>
           </h2>
-          <p className="max-w-lg text-[#b0b7c1] mb-10 tracking-wide text-lg leading-relaxed">
+          <p className="max-w-lg text-[#b0b7c1] mb-10 tracking-wide text-lg leading-relaxed mx-auto md:mx-0">
             AI Memory Lane brings your memories to life by transforming your
             photos into uniquely crafted stories powered by AI.
           </p>
@@ -41,7 +41,7 @@ export default function Home() {
                 router.push("/login");
               }
             }}
-            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-14 py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300 cursor-pointer"
+            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-10 md:px-14 py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300 cursor-pointer"
           >
             Get Started 🚀
           </button>
@@ -51,7 +51,7 @@ export default function Home() {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
-          className="flex-1 rounded-3xl overflow-hidden shadow-[0px_0px_40px_rgba(124,77,255,0.3)]"
+          className="flex-1 rounded-3xl overflow-hidden shadow-[0px_0px_40px_rgba(124,77,255,0.3)] w-full"
         >
           <img
             src="/storytelling-illustration.svg"

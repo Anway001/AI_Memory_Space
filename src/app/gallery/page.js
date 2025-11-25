@@ -110,18 +110,18 @@ export default function Gallery() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col items-center px-6 py-20 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col items-center px-4 md:px-6 py-10 md:py-20 relative overflow-hidden">
       {/* Floating orbs for ambiance */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#7C4DFF] opacity-20 blur-3xl rounded-full animate-pulse"></div>
       <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-[#00B4D8] opacity-20 blur-3xl rounded-full animate-pulse"></div>
 
       <div className="max-w-7xl w-full z-10">
-        <div className="flex justify-between items-center mb-12">
+        <div className="flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12 gap-4">
           <motion.h1
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.7 }}
-            className="text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8]"
+            className="text-3xl md:text-5xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8]"
           >
             Your Gallery
           </motion.h1>
@@ -183,9 +183,9 @@ export default function Gallery() {
       {/* Story Viewer Modal */}
       {selectedStory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedStory(null)}>
-          <div className="bg-[#1a1d2c] w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-y-auto shadow-2xl border border-white/10 flex flex-col md:flex-row" onClick={e => e.stopPropagation()}>
+          <div className="bg-[#1a1d2c] w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-y-auto shadow-2xl border border-white/10 flex flex-col" onClick={e => e.stopPropagation()}>
             {/* Content Section - Full Width */}
-            <div className="w-full p-8 flex flex-col">
+            <div className="w-full p-4 md:p-8 flex flex-col">
               <div className="flex justify-between items-start mb-6">
                 <h2 className="text-3xl font-bold text-white">{selectedStory.title}</h2>
                 <button onClick={() => setSelectedStory(null)} className="text-gray-400 hover:text-white">
