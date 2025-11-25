@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import Link from 'next/link';
 
 export default function Contact() {
     const [formData, setFormData] = useState({
@@ -54,7 +53,7 @@ export default function Contact() {
 
             if (res.ok) {
                 setStatus('success');
-                setFormData({ name: '', email: '', message: '' });
+                setFormData(prev => ({ ...prev, message: '' }));
             } else {
                 setStatus('error');
             }
@@ -65,20 +64,12 @@ export default function Contact() {
     };
 
     return (
-        <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col relative overflow-hidden">
-
-
-            {/* Background Ambience */}
-            <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0 pointer-events-none">
-                <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-[#7C4DFF] opacity-10 blur-[120px] rounded-full animate-pulse"></div>
-                <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-[#00B4D8] opacity-10 blur-[120px] rounded-full animate-pulse"></div>
-            </div>
-
-            <div className="flex-grow flex items-center justify-center p-4 md:p-6 z-10 w-full">
+        <div className="bg-transparent text-[#E0E0E0] py-12 md:py-20">
+            <div className="flex items-center justify-center p-4 md:p-6 w-full max-w-7xl mx-auto">
                 <div className="w-full max-w-4xl flex flex-col md:flex-row bg-[#1a1d2c] rounded-3xl shadow-2xl overflow-hidden border border-white/5">
 
                     {/* Info Section */}
-                    <div className="md:w-1/3 bg-gradient-to-br from-[#7C4DFF] to-[#00B4D8] p-6 md:p-10 text-white flex flex-col justify-between">
+                    <div className="md:w-1/3 bg-gradient-to-br from-[#7C4DFF] to-[#00B4D8] p-6 md:p-10 text-white flex flex-col justify-center">
                         <div>
                             <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
                             <p className="text-white/80 leading-relaxed mb-8">
