@@ -1,96 +1,90 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { FiUser } from "react-icons/fi"; 
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function Navbar() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [userName, setUserName] = useState("");
-  const router = useRouter();
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    const name = localStorage.getItem("name"); // store name at login
-    setIsLoggedIn(!!token);
-    if (name) setUserName(name);
-  }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
-    setIsLoggedIn(false);
-    router.push("/login");
-  };
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="sticky top-0 z-50 flex justify-between items-center bg-[#161a22cc] backdrop-blur-md shadow-md px-12 py-4">
-      <h1 className="text-2xl font-extrabold cursor-pointer text-[#7C4DFF]">
-        <Link href="/">AI Memory Lane</Link>
-      </h1>
+    <nav className="w-full z-50 bg-[#0f1216]/80 backdrop-blur-md border-b border-white/10 sticky top-0">
+      <div className="max-w-7xl mx-auto px-6 md:px-12">
+        <div className="flex justify-between items-center h-20">
+          {/* Logo */}
+          <Link href="/" className="text-2xl font-extrabold text-[#7C4DFF] tracking-tight">
+            AI Memory Lane
+          </Link>
 
-      <div className="hidden md:flex space-x-10 text-[#a0a7b7]">
-        <Link href="/" className="hover:text-[#7C4DFF] font-semibold">
-          Home
-        </Link>
-        <Link href="/#features" className="hover:text-[#7C4DFF] font-semibold">
-          Features
-        </Link>
-        <Link href="/gallery" className="hover:text-[#7C4DFF] font-semibold">
-          Gallery
-        </Link>
-        <Link href="/#contact" className="hover:text-[#7C4DFF] font-semibold">
-          Contact
-        </Link>
-      </div>
-
-      <div className="relative hidden md:flex items-center space-x-6">
-        {!isLoggedIn ? (
-          <>
-            <Link
-              href="/login"
-              className="px-5 py-2 rounded-full font-semibold text-[#7C4DFF] border border-[#7C4DFF] hover:bg-[#7C4DFF] hover:text-black transition"
-            >
-              Login
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-8 items-center">
+            <Link href="/" className="text-[#E0E0E0] hover:text-[#7C4DFF] transition font-medium">
+              Home
             </Link>
-            <Link
-              href="/register"
-              className="bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] px-5 py-2 rounded-full font-semibold text-black hover:brightness-110 transition"
-            >
-              Register
+            <Link href="/gallery" className="text-[#E0E0E0] hover:text-[#7C4DFF] transition font-medium">
+              Gallery
             </Link>
-          </>
-        ) : (
-          <div className="relative">
-            <button
-              onClick={() => setDropdownOpen(!dropdownOpen)}
-              className="flex items-center gap-2 px-4 py-2 rounded-full font-semibold text-[#7C4DFF] border border-[#7C4DFF] hover:bg-[#7C4DFF] hover:text-black transition"
-            >
-              <FiUser size={20} />
-              {userName || "User"}
-              <span>▼</span>
-            </button>
+            <Link href="/settings" className="text-[#E0E0E0] hover:text-[#7C4DFF] transition font-medium">
+              Settings
+            </Link>
+            <Link href="/contact" className="text-[#E0E0E0] hover:text-[#7C4DFF] transition font-medium">
+              Contact
+            </Link>
 
-            {dropdownOpen && (
-              <div className="absolute right-0 mt-2 w-40 bg-[#121622cc] backdrop-blur-md border border-white/10 rounded-xl shadow-lg text-[#a0a7b7]">
-                <button
-                  onClick={() => router.push("/settings")}
-                  className="w-full text-left px-4 py-2 hover:bg-[#7C4DFF] hover:text-black rounded-t-xl transition"
-                >
-                  Settings
-                </button>
-                <button
-                  onClick={handleLogout}
-                  className="w-full text-left px-4 py-2 hover:bg-[#7C4DFF] hover:text-black rounded-b-xl transition"
-                >
-                  Logout
-                </button>
-              </div>
-            )}
           </div>
-        )}
+
+          {/* Mobile Hamburger Button */}
+          <button
+            className="md:hidden text-white text-2xl focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            {isOpen ? "✕" : "☰"}
+          </button>
+        </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-[#1a1d2c] border-b border-white/10 overflow-hidden"
+          >
+            <div className="flex flex-col px-6 py-4 space-y-4">
+              <Link
+                href="/"
+                className="text-[#E0E0E0] hover:text-[#7C4DFF] font-medium text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Home
+              </Link>
+              <Link
+                href="/gallery"
+                className="text-[#E0E0E0] hover:text-[#7C4DFF] font-medium text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Gallery
+              </Link>
+              <Link
+                href="/settings"
+                className="text-[#E0E0E0] hover:text-[#7C4DFF] font-medium text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Settings
+              </Link>
+              <Link
+                href="/contact"
+                className="text-[#E0E0E0] hover:text-[#7C4DFF] font-medium text-lg"
+                onClick={() => setIsOpen(false)}
+              >
+                Contact
+              </Link>
+
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 }

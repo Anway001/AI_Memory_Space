@@ -110,13 +110,14 @@ export default function Gallery() {
   };
 
   return (
-    <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col items-center px-4 md:px-6 py-10 md:py-20 relative overflow-hidden">
+    <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col items-center relative overflow-hidden">
+
       {/* Floating orbs for ambiance */}
       <div className="absolute -top-32 -left-32 w-96 h-96 bg-[#7C4DFF] opacity-20 blur-3xl rounded-full animate-pulse"></div>
       <div className="absolute bottom-0 right-0 w-[28rem] h-[28rem] bg-[#00B4D8] opacity-20 blur-3xl rounded-full animate-pulse"></div>
 
-      <div className="max-w-7xl w-full z-10">
-        <div className="flex flex-col md:flex-row justify-between items-center mb-8 md:mb-12 gap-4">
+      <div className="max-w-7xl w-full z-10 px-4 md:px-6 py-10 md:py-20">
+        <div className="flex justify-center mb-12">
           <motion.h1
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -125,9 +126,6 @@ export default function Gallery() {
           >
             Your Gallery
           </motion.h1>
-          <Link href="/upload" className="px-6 py-3 bg-[#1f2345] rounded-full hover:bg-[#2a2d3d] transition border border-white/10">
-            ← Back to Create
-          </Link>
         </div>
 
         {loading ? (

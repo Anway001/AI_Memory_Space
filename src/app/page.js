@@ -21,14 +21,14 @@ export default function Home() {
           transition={{ duration: 0.8 }}
           className="flex-1 flex flex-col justify-center text-center md:text-left"
         >
-          <h2 className="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+          <h2 className="text-3xl md:text-6xl font-extrabold leading-tight mb-6">
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8]">
               Turn Your Photos
             </span>
             <br />
             <span className="text-white">Into Captivating Stories</span>
           </h2>
-          <p className="max-w-lg text-[#b0b7c1] mb-10 tracking-wide text-lg leading-relaxed mx-auto md:mx-0">
+          <p className="max-w-lg text-[#b0b7c1] mb-8 tracking-wide text-base md:text-lg leading-relaxed mx-auto md:mx-0">
             AI Memory Lane brings your memories to life by transforming your
             photos into uniquely crafted stories powered by AI.
           </p>
@@ -41,7 +41,7 @@ export default function Home() {
                 router.push("/login");
               }
             }}
-            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-10 md:px-14 py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300 cursor-pointer"
+            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-8 md:px-14 py-3 md:py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300 cursor-pointer text-lg"
           >
             Get Started 🚀
           </button>

@@ -4,8 +4,11 @@ import { useState, useEffect } from "react";
 import styled from 'styled-jsx/style';
 import { useRouter } from 'next/navigation';
 
+import Link from 'next/link';
+
 function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
   const [stories, setStories] = useState([]);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const fetchStories = async () => {
@@ -31,47 +34,136 @@ function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
   }, [refreshTrigger]);
 
   return (
-    <div className="sidebar">
-      <button className="new-story-btn" onClick={onNewStory}>
-        + New Story
-      </button>
-      <div className="recents">
-        <h4>Recent</h4>
-        <ul>
-          {stories.length === 0 ? (
-            <li className="recent-item text-gray-500 italic">No stories yet</li>
-          ) : (
-            stories.map((story) => (
-              <li
-                key={story._id}
-                className="recent-item"
-                onClick={() => onSelectStory(story)}
-              >
-                {story.title}
-              </li>
-            ))
-          )}
-        </ul>
+    <>
+      {/* Mobile Header */}
+      <div className="mobile-header">
+        <div className="logo">AI Memory Lane</div>
+        <button className="hamburger" onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}>
+          {isMobileMenuOpen ? '✕' : '☰'}
+        </button>
       </div>
+
+      {/* Sidebar Container */}
+      <div className={`sidebar ${isMobileMenuOpen ? 'open' : ''}`}>
+        <div className="nav-links">
+          <Link href="/" className="nav-item">🏠 Home</Link>
+          <Link href="/gallery" className="nav-item">🖼️ Gallery</Link>
+          <Link href="/settings" className="nav-item">⚙️ Settings</Link>
+          <Link href="/contact" className="nav-item">📩 Contact</Link>
+        </div>
+
+        <button className="new-story-btn" onClick={() => { onNewStory(); setIsMobileMenuOpen(false); }}>
+          + New Story
+        </button>
+
+        <div className="recents">
+          <h4>Recent</h4>
+          <ul>
+            {stories.length === 0 ? (
+              <li className="recent-item text-gray-500 italic">No stories yet</li>
+            ) : (
+              stories.map((story) => (
+                <li
+                  key={story._id}
+                  className="recent-item"
+                  onClick={() => { onSelectStory(story); setIsMobileMenuOpen(false); }}
+                >
+                  {story.title}
+                </li>
+              ))
+            )}
+          </ul>
+        </div>
+      </div>
+
       <style jsx>{`
+        .mobile-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 16px 24px;
+          background-color: #1a1d2c;
+          border-bottom: 1px solid #333;
+          width: 100%;
+          position: fixed;
+          top: 0;
+          left: 0;
+          z-index: 50;
+        }
+        @media (min-width: 768px) {
+          .mobile-header {
+            display: none;
+          }
+        }
+        .logo {
+          font-weight: 800;
+          font-size: 1.25rem;
+          color: #7C4DFF;
+        }
+        .hamburger {
+          background: none;
+          border: none;
+          color: white;
+          font-size: 1.5rem;
+          cursor: pointer;
+        }
+
         .sidebar {
           background-color: #1a1d2c;
           padding: 16px;
           display: flex;
           flex-direction: column;
-          border-bottom: 1px solid #333;
           width: 100%;
-          height: auto;
-          overflow-x: auto;
+          height: 100vh;
+          position: fixed;
+          top: 60px; /* Below header */
+          left: 0;
+          transform: translateX(-100%);
+          transition: transform 0.3s ease-in-out;
+          z-index: 40;
+          overflow-y: auto;
         }
+        .sidebar.open {
+          transform: translateX(0);
+        }
+
         @media (min-width: 768px) {
           .sidebar {
+            position: relative;
+            top: 0;
+            transform: none;
             width: 260px;
             height: 100vh;
             border-right: 1px solid #333;
             border-bottom: none;
             overflow-x: hidden;
+            display: flex;
           }
+        }
+
+        .nav-links {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        
+        .nav-item {
+          color: #E0E0E0;
+          text-decoration: none;
+          font-weight: 600;
+          padding: 12px;
+          background: rgba(255,255,255,0.05);
+          border-radius: 8px;
+          font-size: 1rem;
+          transition: background 0.2s;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .nav-item:hover {
+          background: rgba(124, 77, 255, 0.2);
+          color: #fff;
         }
         .new-story-btn {
           background-color: #7C4DFF;
@@ -115,7 +207,7 @@ function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
           background-color: #2a2d3d;
         }
       `}</style>
-    </div>
+    </>
   );
 }
 
