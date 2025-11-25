@@ -137,6 +137,7 @@ IMPORTANT OUTPUT RULES:
 - Output ONLY the story. Do NOT include your analysis or description of the image in the final output.
 - Do NOT use Markdown formatting (no #, *, **, etc.). Return plain text only.
 - Provide a creative Title on the first line, then a blank line, then the story.
+- **LANGUAGE STYLE**: Use simple, clear, and easy-to-understand English. Avoid complex vocabulary, archaic words, or overly poetic language. Write as if telling a story to a friend.
 
 Story requirements:
 - Genre: '${genre}'

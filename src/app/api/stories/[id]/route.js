@@ -19,19 +19,33 @@ async function authenticate(req) {
 }
 
 export async function PUT(req, { params }) {
+    console.log(`PUT /api/stories/${params.id} called`);
+
     const userId = await authenticate(req);
     if (!userId) {
+        console.log("Authentication failed");
         return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { id } = params;
-    const { savedToGallery, text, title } = await req.json();
+    let body;
+    try {
+        body = await req.json();
+    } catch (e) {
+        console.error("Failed to parse JSON body:", e);
+        return NextResponse.json({ message: "Invalid JSON" }, { status: 400 });
+    }
+
+    const { savedToGallery, text, title } = body;
+    console.log(`Updating story ${id} for user ${userId}. Data:`, { savedToGallery, title, textLength: text?.length });
 
     try {
         await connectDB();
+        console.log("DB Connected");
 
         const story = await Story.findOne({ _id: id, userId });
         if (!story) {
+            console.log("Story not found or user mismatch");
             return NextResponse.json({ message: "Story not found" }, { status: 404 });
         }
 
@@ -40,11 +54,12 @@ export async function PUT(req, { params }) {
         if (title !== undefined) story.title = title;
 
         await story.save();
+        console.log("Story updated successfully");
 
         return NextResponse.json({ message: "Story updated", story }, { status: 200 });
     } catch (error) {
         console.error("Error updating story:", error);
-        return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
+        return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
     }
 }
 
