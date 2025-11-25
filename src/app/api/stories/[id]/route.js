@@ -56,7 +56,16 @@ export async function PUT(req, { params }) {
         await story.save();
         console.log("Story updated successfully");
 
-        return NextResponse.json({ message: "Story updated", story: story.toObject() }, { status: 200 });
+        // Return only necessary fields to avoid hitting Vercel's 4MB response limit
+        const sanitizedStory = {
+            _id: story._id,
+            title: story.title,
+            text: story.text,
+            savedToGallery: story.savedToGallery,
+            createdAt: story.createdAt
+        };
+
+        return NextResponse.json({ message: "Story updated", story: sanitizedStory }, { status: 200 });
     } catch (error) {
         console.error("Error updating story:", error);
         return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
