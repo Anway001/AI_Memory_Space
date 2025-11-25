@@ -36,8 +36,16 @@ export async function POST(req) {
     if (!user) return NextResponse.json({ error: "User not found" }, { status: 404 });
 
     // Update basic settings
-    const { name, defaultGenre, storyLength, autoRefine, theme, audioSpeed, voice, password } = data;
+    const { name, email, profilePic, defaultGenre, storyLength, autoRefine, theme, audioSpeed, voice, password } = data;
+
+    console.log("=== Settings Update Request ===");
+    console.log("User ID:", decoded.id);
+    console.log("Current user data:", { name: user.name, email: user.email });
+    console.log("Incoming data:", { name, email, defaultGenre, storyLength, autoRefine, theme, audioSpeed, voice, profilePicLength: profilePic?.length });
+
     if (name) user.name = name;
+    if (email) user.email = email;
+    if (profilePic !== undefined) user.profilePic = profilePic;
     if (defaultGenre) user.defaultGenre = defaultGenre;
     if (storyLength) user.storyLength = storyLength;
     if (autoRefine !== undefined) user.autoRefine = autoRefine;
@@ -51,11 +59,24 @@ export async function POST(req) {
       user.password = await bcrypt.hash(password, salt);
     }
 
-    await user.save();
+    console.log("Updated user object before save:", {
+      name: user.name,
+      email: user.email,
+      defaultGenre: user.defaultGenre,
+      storyLength: user.storyLength,
+      autoRefine: user.autoRefine,
+      theme: user.theme,
+      audioSpeed: user.audioSpeed,
+      voice: user.voice,
+      profilePicLength: user.profilePic?.length
+    });
 
-    return NextResponse.json({ message: "Settings updated successfully!" });
+    const savedUser = await user.save();
+    console.log("User saved successfully:", savedUser._id);
+
+    return NextResponse.json({ message: "Settings updated successfully!", user: savedUser });
   } catch (err) {
-    console.error(err);
-    return NextResponse.json({ error: "Failed to update settings" }, { status: 500 });
+    console.error("Settings Update Error:", err);
+    return NextResponse.json({ error: "Failed to update settings: " + err.message }, { status: 500 });
   }
 }
