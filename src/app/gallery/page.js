@@ -174,21 +174,8 @@ export default function Gallery() {
       {selectedStory && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm" onClick={() => setSelectedStory(null)}>
           <div className="bg-[#1a1d2c] w-full max-w-4xl max-h-[90vh] rounded-3xl overflow-y-auto shadow-2xl border border-white/10 flex flex-col md:flex-row" onClick={e => e.stopPropagation()}>
-            {/* Image Section */}
-            <div className="md:w-1/2 bg-black/50 relative">
-              {selectedStory.imageBase64 ? (
-                <img
-                  src={`data:image/jpeg;base64,${selectedStory.imageBase64}`}
-                  alt="Story"
-                  className="w-full h-full object-contain md:absolute inset-0"
-                />
-              ) : (
-                <div className="w-full h-64 md:h-full flex items-center justify-center text-gray-500">No Image</div>
-              )}
-            </div>
-
-            {/* Content Section */}
-            <div className="md:w-1/2 p-8 flex flex-col">
+            {/* Content Section - Full Width */}
+            <div className="w-full p-8 flex flex-col">
               <div className="flex justify-between items-start mb-6">
                 <h2 className="text-3xl font-bold text-white">{selectedStory.title}</h2>
                 <button onClick={() => setSelectedStory(null)} className="text-gray-400 hover:text-white">
@@ -210,12 +197,26 @@ export default function Gallery() {
                 )}
               </div>
 
-              {selectedStory.audioBase64 && (
-                <div className="mb-6">
-                  <h4 className="text-sm font-semibold text-gray-400 mb-2 uppercase">Audio Narration</h4>
-                  <audio controls src={`data:audio/wav;base64,${selectedStory.audioBase64}`} className="w-full rounded-lg" />
-                </div>
-              )}
+              {/* Client-Side TTS Controls */}
+              <div className="mb-6">
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (window.speechSynthesis.speaking) {
+                      window.speechSynthesis.cancel();
+                    } else {
+                      const utterance = new SpeechSynthesisUtterance(selectedStory.text);
+                      const voices = window.speechSynthesis.getVoices();
+                      const preferredVoice = voices.find(voice => voice.name.includes("Google") || voice.name.includes("Female"));
+                      if (preferredVoice) utterance.voice = preferredVoice;
+                      window.speechSynthesis.speak(utterance);
+                    }
+                  }}
+                  className="w-full py-3 rounded-lg bg-[#2a2d3d] text-[#7C4DFF] font-semibold hover:bg-[#33364a] transition flex items-center justify-center gap-2"
+                >
+                  <span>🔊</span> Play / Stop Narration
+                </button>
+              </div>
 
               <div className="flex gap-4 mt-auto">
                 {isEditing ? (

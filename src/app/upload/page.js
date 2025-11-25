@@ -544,9 +544,28 @@ export default function Upload() {
                   />
                 )}
 
-                {story.audioUrl && (
-                  <audio controls src={story.audioUrl} className="mb-3 w-full rounded-lg shadow" />
-                )}
+                {/* Client-Side TTS Controls */}
+                <div className="w-full mb-4 flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (window.speechSynthesis.speaking) {
+                        window.speechSynthesis.cancel();
+                      } else {
+                        const utterance = new SpeechSynthesisUtterance(story.text);
+                        // Optional: Select a better voice if available
+                        const voices = window.speechSynthesis.getVoices();
+                        const preferredVoice = voices.find(voice => voice.name.includes("Google") || voice.name.includes("Female"));
+                        if (preferredVoice) utterance.voice = preferredVoice;
+
+                        window.speechSynthesis.speak(utterance);
+                      }
+                    }}
+                    className="w-full py-3 rounded-lg bg-[#2a2d3d] text-[#7C4DFF] font-semibold hover:bg-[#33364a] transition flex items-center justify-center gap-2"
+                  >
+                    <span>🔊</span> Play / Stop Narration
+                  </button>
+                </div>
 
                 <div className="flex gap-2 w-full">
                   <button
@@ -603,6 +622,6 @@ export default function Upload() {
           margin: 15vh 0;
         }
       `}</style>
-    </div>
+    </div >
   );
 }
