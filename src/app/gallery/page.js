@@ -74,6 +74,8 @@ export default function Gallery() {
 
   const handleSaveEdit = async () => {
     if (!selectedStory) return;
+    console.log("Saving edit for story:", selectedStory._id);
+
     const token = localStorage.getItem("token");
     try {
       const res = await fetch(`/api/stories/${selectedStory._id}`, {
@@ -85,17 +87,25 @@ export default function Gallery() {
         body: JSON.stringify({ text: editedText })
       });
 
+      console.log("Save response status:", res.status);
+
       if (res.ok) {
         const updatedStory = await res.json();
+        console.log("Story updated:", updatedStory);
+
         // Update local state
         setStories(prev => prev.map(s => s._id === selectedStory._id ? { ...s, text: editedText } : s));
         setSelectedStory(prev => ({ ...prev, text: editedText }));
         setIsEditing(false);
         alert("Story updated successfully!");
+      } else {
+        const errorData = await res.json();
+        console.error("Failed to update story:", errorData);
+        alert(`Failed to update story: ${errorData.message}`);
       }
     } catch (error) {
-      console.error("Failed to update story", error);
-      alert("Failed to update story.");
+      console.error("Failed to update story (network error):", error);
+      alert("Failed to update story due to network error.");
     }
   };
 
