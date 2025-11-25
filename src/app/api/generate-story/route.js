@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
 import { pipeline } from '@xenova/transformers';
 import { WaveFile } from 'wavefile'; // Corrected import
 
