@@ -56,7 +56,7 @@ export async function PUT(req, { params }) {
         await story.save();
         console.log("Story updated successfully");
 
-        return NextResponse.json({ message: "Story updated", story }, { status: 200 });
+        return NextResponse.json({ message: "Story updated", story: story.toObject() }, { status: 200 });
     } catch (error) {
         console.error("Error updating story:", error);
         return NextResponse.json({ message: "Internal Server Error", error: error.message }, { status: 500 });
