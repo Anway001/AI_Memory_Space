@@ -55,13 +55,23 @@ function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
       </div>
       <style jsx>{`
         .sidebar {
-          background-color: #1a1d2c; /* Darker shade from palette */
+          background-color: #1a1d2c;
           padding: 16px;
-          height: 100vh;
           display: flex;
           flex-direction: column;
-          width: 260px;
-          border-right: 1px solid #333;
+          border-bottom: 1px solid #333;
+          width: 100%;
+          height: auto;
+          overflow-x: auto;
+        }
+        @media (min-width: 768px) {
+          .sidebar {
+            width: 260px;
+            height: 100vh;
+            border-right: 1px solid #333;
+            border-bottom: none;
+            overflow-x: hidden;
+          }
         }
         .new-story-btn {
           background-color: #7C4DFF;
@@ -483,7 +493,7 @@ export default function Upload() {
 
               {/* Images Preview */}
               {images.length > 0 && (
-                <div className="grid grid-cols-3 gap-6 mt-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-8">
                   {images.map(({ preview }, i) => (
                     <div key={i} className="relative rounded-2xl shadow-xl bg-[#1E2541CC] p-5 flex flex-col items-center hover:scale-105 transition">
                       <button
@@ -609,14 +619,25 @@ export default function Upload() {
           display: flex;
           height: 100vh;
           color: #E0E0E0;
+          flex-direction: column;
+        }
+        @media (min-width: 768px) {
+          .page-container {
+            flex-direction: row;
+          }
         }
         .main-content {
           flex-grow: 1;
           overflow-y: auto;
-          padding: 2rem;
+          padding: 1rem;
           display: flex;
           flex-direction: column;
           align-items: center;
+        }
+        @media (min-width: 768px) {
+          .main-content {
+            padding: 2rem;
+          }
         }
         .content-wrapper {
           width: 100%;
@@ -624,7 +645,7 @@ export default function Upload() {
         }
         .welcome-message {
           text-align: center;
-          margin: 15vh 0;
+          margin: 10vh 0;
         }
       `}</style>
     </div >
