@@ -244,7 +244,7 @@ export default function Upload() {
 
     } catch (error) {
       console.error("Error generating story:", error);
-      alert("Failed to generate story. Make sure your local servers (Ollama, etc.) are running.");
+      alert("Failed to generate story. Please try again.");
     } finally {
       setLoading(false);
       setLoadingMessage("");
@@ -548,26 +548,13 @@ export default function Upload() {
                   <audio controls src={story.audioUrl} className="mb-3 w-full rounded-lg shadow" />
                 )}
 
-                <label className="text-sm underline cursor-pointer mb-2 text-[#7C4DFF] hover:text-[#00B4D8]">
-                  Upload Your Audio
-                  <input
-                    type="file"
-                    accept="audio/*"
-                    onChange={handleUserAudioUpload}
-                    className="hidden"
-                  />
-                </label>
-                {userAudio && (
-                  <audio controls src={userAudio} className="mb-3 w-full rounded-lg shadow" />
-                )}
-
                 <div className="flex gap-2 w-full">
                   <button
                     type="button"
                     onClick={handleSaveToggle}
                     className={`flex-1 py-2 rounded-full font-semibold transition ${story.savedToGallery
-                        ? "bg-red-500 text-white hover:bg-red-600"
-                        : "bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-black hover:brightness-110"
+                      ? "bg-red-500 text-white hover:bg-red-600"
+                      : "bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-black hover:brightness-110"
                       }`}
                   >
                     {story.savedToGallery ? "Remove Saved" : "Save"}
