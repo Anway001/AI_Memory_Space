@@ -3,7 +3,7 @@ import { pipeline } from '@xenova/transformers';
 import { WaveFile } from 'wavefile'; // Corrected import
 
 // --- LOCAL SERVER CONFIGURATION ---
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // --- GOOGLE GEMINI CONFIGURATION ---
 const API_KEY = process.env.GEMINI_API_KEY;
