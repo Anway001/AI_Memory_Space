@@ -1,5 +1,4 @@
-import { NextResponse } from "next/server";
-import mongoose from "mongoose";
+import { connectDB } from "@/lib/db";
 import Story from "@/models/story";
 import User from "@/models/user";
 import jwt from "jsonwebtoken";
@@ -29,7 +28,7 @@ export async function PUT(req, { params }) {
     const { savedToGallery, text, title } = await req.json();
 
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
+        await connectDB();
 
         const story = await Story.findOne({ _id: id, userId });
         if (!story) {
@@ -58,7 +57,7 @@ export async function DELETE(req, { params }) {
     const { id } = params;
 
     try {
-        await mongoose.connect(process.env.MONGODB_URI);
+        await connectDB();
 
         const story = await Story.findOneAndDelete({ _id: id, userId });
         if (!story) {
