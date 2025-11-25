@@ -13,7 +13,7 @@ export default function Login() {
     e.preventDefault();
 
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/login", {
+      const res = await axios.post("/api/auth/login", {
         email,
         password,
       });
@@ -21,7 +21,7 @@ export default function Login() {
       if (res.status === 200) {
         alert("Login successful!");
         localStorage.setItem("token", res.data.token);
-        localStorage.setItem("name", res.data.user.name); 
+        localStorage.setItem("name", res.data.user.name);
         router.push("/");
       }
     } catch (err) {
