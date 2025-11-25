@@ -30,7 +30,8 @@ export default function Navbar() {
   }, []);
 
   const ProfileIcon = () => {
-    const initial = userName ? userName.charAt(0).toUpperCase() : "U";
+    if (!userName) return null; // Don't show until name is loaded
+    const initial = userName.charAt(0).toUpperCase();
     return (
       <Link href="/settings" className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-white font-bold text-lg shadow-lg hover:scale-105 transition">
         {initial}

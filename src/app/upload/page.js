@@ -147,6 +147,11 @@ function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
           gap: 10px;
           margin-bottom: 20px;
         }
+        @media (min-width: 768px) {
+          .nav-links {
+            display: none;
+          }
+        }
         
         .nav-item {
           color: #E0E0E0;
@@ -177,6 +182,11 @@ function Sidebar({ onNewStory, refreshTrigger, onSelectStory }) {
           margin-bottom: 24px;
           transition: background-color 0.2s;
           text-align: center;
+        }
+        @media (min-width: 768px) {
+          .new-story-btn {
+            display: none;
+          }
         }
         .new-story-btn:hover {
           background-color: #6b3fef;
