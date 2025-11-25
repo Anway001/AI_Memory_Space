@@ -1,10 +1,12 @@
 "use client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import FeaturesSection from "./Components/FeaturesSection";
 import ContactSection from "./Components/ContactSection";
 import { motion } from "framer-motion";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <div className="min-h-screen bg-[#0f1216] text-[#E0E0E0] flex flex-col relative overflow-hidden">
       {/* Floating gradient orbs for background ambiance */}
@@ -30,12 +32,19 @@ export default function Home() {
             AI Memory Lane brings your memories to life by transforming your
             photos into uniquely crafted stories powered by AI.
           </p>
-          <Link
-            href="/upload"
-            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-14 py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300"
+          <button
+            onClick={() => {
+              const token = localStorage.getItem("token");
+              if (token) {
+                router.push("/upload");
+              } else {
+                router.push("/login");
+              }
+            }}
+            className="inline-block bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-center text-black font-bold px-14 py-4 rounded-full shadow-lg hover:scale-105 hover:brightness-110 transition transform duration-300 cursor-pointer"
           >
             Get Started 🚀
-          </Link>
+          </button>
         </motion.div>
 
         <motion.div
