@@ -36,9 +36,7 @@ const storySchema = new mongoose.Schema({
     }
 }, { timestamps: true });
 
-// Force model recompilation to ensure schema updates are picked up in dev mode
-if (mongoose.models.Story) {
-    delete mongoose.models.Story;
-}
+// Standard Next.js/Mongoose singleton pattern
+const Story = mongoose.models.Story || mongoose.model("Story", storySchema);
 
-export default mongoose.model("Story", storySchema);
+export default Story;
