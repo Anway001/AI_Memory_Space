@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import FeaturesSection from "./Components/FeaturesSection";
-import ContactSection from "./Components/ContactSection";
+import Contact from "./contact/page";
 import { motion } from "framer-motion";
 
 export default function Home() {
@@ -83,7 +83,7 @@ export default function Home() {
         viewport={{ once: true }}
         className="relative z-10"
       >
-        <ContactSection />
+        <Contact />
       </motion.section>
 
       {/* Footer */}

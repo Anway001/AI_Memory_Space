@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
@@ -11,6 +11,31 @@ export default function Contact() {
         message: ''
     });
     const [status, setStatus] = useState('');
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) return;
+
+            try {
+                const res = await fetch('/api/settings', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (res.ok) {
+                    const data = await res.json();
+                    setFormData(prev => ({
+                        ...prev,
+                        name: data.name || '',
+                        email: data.email || ''
+                    }));
+                }
+            } catch (error) {
+                console.error('Failed to fetch user data', error);
+            }
+        };
+
+        fetchUserData();
+    }, []);
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -70,12 +95,6 @@ export default function Contact() {
                                     <span className="font-medium">Digital Realm, Server 42</span>
                                 </div>
                             </div>
-                        </div>
-
-                        <div className="mt-12">
-                            <Link href="/" className="text-white/70 hover:text-white text-sm font-semibold flex items-center gap-2 transition">
-                                ← Back to Home
-                            </Link>
                         </div>
                     </div>
 
