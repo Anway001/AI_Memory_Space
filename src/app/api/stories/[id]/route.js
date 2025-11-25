@@ -2,6 +2,7 @@ import { connectDB } from "@/lib/db";
 import Story from "@/models/story";
 import User from "@/models/user";
 import jwt from "jsonwebtoken";
+import { NextResponse } from "next/server";
 
 // Helper to authenticate and get user
 async function authenticate(req) {
