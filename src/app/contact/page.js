@@ -54,7 +54,7 @@ export default function Contact() {
                     <div>
                         <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
                         <p className="text-white/80 leading-relaxed mb-8">
-                            Have questions, feedback, or just want to say hello? We'd love to hear from you.
+                            Have questions, feedback, or just want to say hello? We&apos;d love to hear from you.
                         </p>
 
                         <div className="space-y-4">
@@ -125,8 +125,8 @@ export default function Contact() {
                             type="submit"
                             disabled={status === 'sending'}
                             className={`w-full py-3 rounded-lg font-bold text-lg transition ${status === 'sending'
-                                    ? 'bg-gray-600 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-black hover:brightness-110'
+                                ? 'bg-gray-600 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-[#7C4DFF] to-[#00B4D8] text-black hover:brightness-110'
                                 }`}
                         >
                             {status === 'sending' ? 'Sending...' : 'Send Message'}
@@ -138,7 +138,7 @@ export default function Contact() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="p-4 rounded-lg bg-green-500/20 text-green-400 text-center border border-green-500/30"
                             >
-                                Message sent successfully! We'll get back to you soon.
+                                Message sent successfully! We&apos;ll get back to you soon.
                             </motion.div>
                         )}
 
