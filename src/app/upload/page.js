@@ -228,11 +228,16 @@ export default function Upload() {
         savedToGallery: false // Default state
       };
 
+      // Extract title from the first line of the story
+      const storyLines = result.story.split('\n');
+      const extractedTitle = storyLines[0].replace(/^#+\s*/, '').trim(); // Remove markdown headers if any
+      const finalTitle = extractedTitle || `Story - ${new Date().toLocaleString()}`;
+
       // Auto-save to DB (Recent)
       const savedStory = await saveStoryToDB({
         text: result.story,
         audioBase64: result.audioBase64,
-        title: `Story - ${new Date().toLocaleString()}`
+        title: finalTitle
       });
 
       if (savedStory) {

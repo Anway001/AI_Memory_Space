@@ -7,16 +7,15 @@ console.log("ENV FILES LOADED:", process.env.MONGODB_URI ? "YES" : "NO");
 
 
 export async function connectDB() {
-  if (isConnected) {
+  if (mongoose.connections[0].readyState) {
     return;
   }
 
   try {
     const conn = await mongoose.connect(MONGODB_URI, {
-      dbName: "aimemory",   // <-- this makes sure your DB name is always correct
+      dbName: "aimemory",
     });
 
-    isConnected = true;
     console.log(" MongoDB connected:", conn.connection.host);
   } catch (err) {
     console.error(" MongoDB connection error:", err.message);
